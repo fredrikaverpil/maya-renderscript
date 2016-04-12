@@ -4,7 +4,7 @@ Combine multiple *.mel and/or *.py scripts to be used on Maya commandline render
 
 ### Installation
 
-Place `maya-renderscript.mel` script in your `MAYA_SCRIPT_PATH`.
+Place `maya-renderscript.mel` in your `MAYA_SCRIPT_PATH`.
  
 ### Usage
 
