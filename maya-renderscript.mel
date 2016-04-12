@@ -1,0 +1,61 @@
+// Maya Pre/post render script consolidator
+// by Fredrik Averpil, fredrik.averpil [at] gmail.com
+//
+// Installation: place this MEL script in your MAYA_SCRIPT_PATH
+//
+// Usage:
+// Use the MEL function when commandline rendering and feed it any number of scripts. Example:
+// Render.exe -preRender "RenderScriptConsolidator({\"C:/preRender.mel\", \"C:/preRender.py\", \"C:/preRender2.py\"})" C:/MayaProject/scenes/MyScene.ma
+//
+// Please note: Any existing MEL in the Maya scene file's render globals/render options is overridden by this consolidation.
+
+proc string filename(string $filepath)
+{
+	string $filename = match( "[^/\\]*$", $filepath );
+	return $filename;
+}
+
+
+proc string folderpath( string $filepath )
+{
+  string $dir = match( "^.*/", $filepath );
+
+  int $sz = size( $dir );
+  // Strip off trailing '/'
+  //
+  if ( ( $sz > 1 ) && ( substring( $dir, $sz, $sz ) == "/" ) ) {
+    $dir = substring( $dir, 1, ($sz - 1) );
+  }
+  return $dir;
+}
+
+
+global proc RenderScriptConsolidator(string $arguments[])
+{
+	print("------------ PRE/POST-RENDER SCRIPT CONSOLIDATOR START ------------\n");
+	// For each script file, load it
+	for( $item in $arguments){
+		//print($item + "\n");
+		$filename = filename( $item );
+		$folderpath = folderpath( $item );
+		if( `match ".py" $filename` != "" ){
+			// Assume Python code
+			print("Python script detected. Executing " + $filename + " ...\n");
+			$modulename = `substitute ".py" $filename ""`;
+			//print("import sys\nsys.path.append(\"" + $folderpath + "\")\nimport " + $modulename); // Make sure the Pyhton script is executed by itself
+			python("import sys\nsys.path.append(\"" + $folderpath + "\")\nimport " + $modulename); // Make sure the Pyhton script is executed by itself
+			print("Done executing " + $filename + "\n");
+		}else if( `match ".mel" $filename` != "" ){
+			// Assume MEL code
+			print("MEL script detected. Executing " + $filename + " ...\n");
+			string $command = "source \""+$item+"\""; // Make sure the MEL script is executed by itself
+			eval $command;
+			print("Done executing " + $filename + "\n");
+
+		}
+
+	}
+
+	print("------------ PRE/POST-RENDER SCRIPT CONSOLIDATOR END ------------\n");
+} 
+
