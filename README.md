@@ -1,6 +1,6 @@
 # maya-renderscript
 
-Combine multiple *.mel and/or *.py scripts to be used on Maya commandline rendering.
+Combine multiple *.mel and/or *.py scripts to be used when commandline rendering with Maya.
 
 ### Installation
 
