@@ -38,14 +38,14 @@ global proc RenderScriptConsolidator(string $arguments[])
 		//print($item + "\n");
 		$filename = filename( $item );
 		$folderpath = folderpath( $item );
-		if( `match ".py" $filename` != "" ){
+		if( `match "\\.py" $filename` != "" ){
 			// Assume Python code
 			print("Python script detected. Executing " + $filename + " ...\n");
-			$modulename = `substitute ".py" $filename ""`;
+			$modulename = `substitute "\\.py" $filename ""`;
 			//print("import sys\nsys.path.append(\"" + $folderpath + "\")\nimport " + $modulename); // Make sure the Pyhton script is executed by itself
 			python("import sys\nsys.path.append(\"" + $folderpath + "\")\nimport " + $modulename); // Make sure the Pyhton script is executed by itself
 			print("Done executing " + $filename + "\n");
-		}else if( `match ".mel" $filename` != "" ){
+		}else if( `match "\\.mel" $filename` != "" ){
 			// Assume MEL code
 			print("MEL script detected. Executing " + $filename + " ...\n");
 			string $command = "source \""+$item+"\""; // Make sure the MEL script is executed by itself
@@ -57,5 +57,4 @@ global proc RenderScriptConsolidator(string $arguments[])
 	}
 
 	print("------------ PRE/POST-RENDER SCRIPT CONSOLIDATOR END ------------\n");
-} 
-
+}
