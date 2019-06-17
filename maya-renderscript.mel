@@ -41,8 +41,7 @@ global proc RenderScriptConsolidator(string $arguments[])
 		if( `match "\\.py$" $filename` != "" ){
 			// Assume Python code
 			print("Python script detected. Executing " + $filename + " ...\n");
-
-			//print("import sys\nsys.path.append(\"" + $folderpath + "\")\nimport " + $modulename); // Make sure the Pyhton script is executed by itself
+			$modulename = `substitute "\\.py$" $filename ""`;
 			python("import sys\nsys.path.append(\"" + $folderpath + "\")\nimport " + $modulename); // Make sure the Pyhton script is executed by itself
 			print("Done executing " + $filename + "\n");
 		}else if( `match "\\.mel$" $filename` != "" ){
